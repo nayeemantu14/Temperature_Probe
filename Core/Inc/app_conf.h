@@ -569,6 +569,7 @@ typedef enum
   CFG_TIM_PROC_ID_ISR,
   /* USER CODE BEGIN CFG_TimProcID_t */
   CFG_TIM_TMPSVC_ID_ISR,
+  CFG_TIM_BATTSVC_ID_ISR,
   /* USER CODE END CFG_TimProcID_t */
 } CFG_TimProcID_t;
 
@@ -582,7 +583,7 @@ typedef enum
  * This shall be set to 0 in a final product
  *
  */
-#define CFG_HW_RESET_BY_FW         0
+#define CFG_HW_RESET_BY_FW         1
 
 /**
  * keep debugger enabled while in any low power mode when set to 1
@@ -689,6 +690,7 @@ typedef enum
   CFG_TASK_SYSTEM_HCI_ASYNCH_EVT_ID,
   /* USER CODE BEGIN CFG_Task_Id_With_NO_HCI_Cmd_t */
   CFG_TASK_READ_TEMPERATURE,
+  CFG_TASK_READ_BATTERY,
   /* USER CODE END CFG_Task_Id_With_NO_HCI_Cmd_t */
   CFG_LAST_TASK_ID_WITH_NO_HCICMD                                            /**< Shall be LAST in the list */
 } CFG_Task_Id_With_NO_HCI_Cmd_t;

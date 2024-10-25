@@ -36,6 +36,8 @@ typedef enum
 {
   /* TMPSVC */
   CUSTOM_STM_TMPCHAR,
+  /* BATTSVC */
+  CUSTOM_STM_BATTCHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
@@ -44,6 +46,10 @@ typedef enum
   CUSTOM_STM_TMPCHAR_READ_EVT,
   CUSTOM_STM_TMPCHAR_NOTIFY_ENABLED_EVT,
   CUSTOM_STM_TMPCHAR_NOTIFY_DISABLED_EVT,
+  /* BATTCHAR */
+  CUSTOM_STM_BATTCHAR_READ_EVT,
+  CUSTOM_STM_BATTCHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_BATTCHAR_NOTIFY_DISABLED_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -70,6 +76,7 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 extern uint16_t SizeTmpchar;
+extern uint16_t SizeBattchar;
 
 /* USER CODE BEGIN EC */
 
