@@ -48,6 +48,7 @@ typedef struct
   uint16_t				ADC_BUFF[2];
   uint16_t 				TMP_ADC_VALUE;
   uint16_t 				BATT_ADC_VALUE;
+
   /* USER CODE END CUSTOM_APP_Context_t */
 
   uint16_t              ConnectionHandle;
@@ -125,13 +126,13 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
 
     case CUSTOM_STM_TMPCHAR_NOTIFY_ENABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_TMPCHAR_NOTIFY_ENABLED_EVT */
-    	UTIL_SEQ_SetTask(1<<CFG_TASK_READ_TEMPERATURE, CFG_SCH_PRIO_0);
+
       /* USER CODE END CUSTOM_STM_TMPCHAR_NOTIFY_ENABLED_EVT */
       break;
 
     case CUSTOM_STM_TMPCHAR_NOTIFY_DISABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_TMPCHAR_NOTIFY_DISABLED_EVT */
-    	UTIL_SEQ_PauseTask(1<<CFG_TASK_READ_TEMPERATURE);
+
       /* USER CODE END CUSTOM_STM_TMPCHAR_NOTIFY_DISABLED_EVT */
       break;
 
@@ -144,15 +145,13 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
 
     case CUSTOM_STM_BATTCHAR_NOTIFY_ENABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_BATTCHAR_NOTIFY_ENABLED_EVT */
-    	UTIL_SEQ_SetTask(1<<CFG_TASK_READ_BATTERY, CFG_SCH_PRIO_0);
-    	HW_TS_Stop(Custom_App_Context.TMP_TIMER_ID);
+
       /* USER CODE END CUSTOM_STM_BATTCHAR_NOTIFY_ENABLED_EVT */
       break;
 
     case CUSTOM_STM_BATTCHAR_NOTIFY_DISABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_BATTCHAR_NOTIFY_DISABLED_EVT */
-    	UTIL_SEQ_PauseTask(1<<CFG_TASK_READ_BATTERY);
-    	HW_TS_Stop(Custom_App_Context.BATT_TIMER_ID);
+
       /* USER CODE END CUSTOM_STM_BATTCHAR_NOTIFY_DISABLED_EVT */
       break;
 
@@ -187,9 +186,25 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
     /* USER CODE END P2PS_CUSTOM_Notification_Custom_Evt_Opcode */
     case CUSTOM_CONN_HANDLE_EVT :
       /* USER CODE BEGIN CUSTOM_CONN_HANDLE_EVT */
-    	UTIL_SEQ_SetTask(1<<CFG_TASK_READ_TEMPERATURE, CFG_SCH_PRIO_0);
+    	if(UTIL_SEQ_IsPauseTask(1<<CFG_TASK_READ_TEMPERATURE))
+    	{
+    		UTIL_SEQ_ResumeTask(1<<CFG_TASK_READ_TEMPERATURE);
+    	}
+    	else
+    	{
+    		UTIL_SEQ_SetTask(1<<CFG_TASK_READ_TEMPERATURE, CFG_SCH_PRIO_0);
+    	}
     	HW_TS_Start(Custom_App_Context.TMP_TIMER_ID, TMPTIMER_INTERVAL);
-    	UTIL_SEQ_SetTask(1<<CFG_TASK_READ_BATTERY, CFG_SCH_PRIO_0);
+
+    	if(UTIL_SEQ_IsPauseTask(1<<CFG_TASK_READ_BATTERY))
+    	{
+    		UTIL_SEQ_SetTask(1<<CFG_TASK_READ_BATTERY, CFG_SCH_PRIO_0);
+    	}
+    	else
+    	{
+    		UTIL_SEQ_SetTask(1<<CFG_TASK_READ_BATTERY, CFG_SCH_PRIO_0);
+    	}
+
     	HW_TS_Start(Custom_App_Context.BATT_TIMER_ID, BATTTIMER_INTERVAL);
       /* USER CODE END CUSTOM_CONN_HANDLE_EVT */
       break;
