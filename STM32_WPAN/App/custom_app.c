@@ -145,12 +145,14 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
     case CUSTOM_STM_BATTCHAR_NOTIFY_ENABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_BATTCHAR_NOTIFY_ENABLED_EVT */
     	UTIL_SEQ_SetTask(1<<CFG_TASK_READ_BATTERY, CFG_SCH_PRIO_0);
+    	HW_TS_Stop(Custom_App_Context.TMP_TIMER_ID);
       /* USER CODE END CUSTOM_STM_BATTCHAR_NOTIFY_ENABLED_EVT */
       break;
 
     case CUSTOM_STM_BATTCHAR_NOTIFY_DISABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_BATTCHAR_NOTIFY_DISABLED_EVT */
     	UTIL_SEQ_PauseTask(1<<CFG_TASK_READ_BATTERY);
+    	HW_TS_Stop(Custom_App_Context.BATT_TIMER_ID);
       /* USER CODE END CUSTOM_STM_BATTCHAR_NOTIFY_DISABLED_EVT */
       break;
 
@@ -195,7 +197,9 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
     case CUSTOM_DISCON_HANDLE_EVT :
       /* USER CODE BEGIN CUSTOM_DISCON_HANDLE_EVT */
     	UTIL_SEQ_PauseTask(1<<CFG_TASK_READ_TEMPERATURE);
+    	HW_TS_Stop(Custom_App_Context.TMP_TIMER_ID);
     	UTIL_SEQ_PauseTask(1<<CFG_TASK_READ_BATTERY);
+    	HW_TS_Stop(Custom_App_Context.BATT_TIMER_ID);
       /* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
       break;
 
