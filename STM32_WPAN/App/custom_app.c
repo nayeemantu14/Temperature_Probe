@@ -29,8 +29,13 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "stm32_lpm_if.h"
 #include "stm32_lpm.h"
+#include "ssd1306_fonts.h"
+#include "ssd1306.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,6 +102,8 @@ static void Custom_Battchar_Update_Char(void);
 static void Custom_Battchar_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
+void updateConnScreen(void);
+void updateDisConnScreen(void);
 static void readTemperature(void);
 static void TMP_TIMER_ISR(void);
 
@@ -189,6 +196,7 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
     	if(UTIL_SEQ_IsPauseTask(1<<CFG_TASK_READ_TEMPERATURE))
     	{
     		UTIL_SEQ_ResumeTask(1<<CFG_TASK_READ_TEMPERATURE);
+    		UTIL_SEQ_SetTask(1<<CFG_TASK_READ_TEMPERATURE, CFG_SCH_PRIO_0);
     	}
     	else
     	{
@@ -198,6 +206,7 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
 
     	if(UTIL_SEQ_IsPauseTask(1<<CFG_TASK_READ_BATTERY))
     	{
+    		UTIL_SEQ_ResumeTask(1<<CFG_TASK_READ_BATTERY);
     		UTIL_SEQ_SetTask(1<<CFG_TASK_READ_BATTERY, CFG_SCH_PRIO_0);
     	}
     	else
@@ -206,6 +215,8 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
     	}
 
     	HW_TS_Start(Custom_App_Context.BATT_TIMER_ID, BATTTIMER_INTERVAL);
+    	updateConnScreen();
+
       /* USER CODE END CUSTOM_CONN_HANDLE_EVT */
       break;
 
@@ -215,6 +226,7 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
     	HW_TS_Stop(Custom_App_Context.TMP_TIMER_ID);
     	UTIL_SEQ_PauseTask(1<<CFG_TASK_READ_BATTERY);
     	HW_TS_Stop(Custom_App_Context.BATT_TIMER_ID);
+    	updateDisConnScreen();
       /* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
       break;
 
@@ -235,10 +247,21 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
 void Custom_APP_Init(void)
 {
   /* USER CODE BEGIN CUSTOM_APP_Init */
+	char initMSG[] = "Temperature Probe";
 	UTIL_SEQ_RegTask(1<<CFG_TASK_READ_TEMPERATURE, UTIL_SEQ_RFU, readTemperature);
 	UTIL_SEQ_RegTask(1<<CFG_TASK_READ_BATTERY, UTIL_SEQ_RFU, readBattery);
 	HW_TS_Create(CFG_TIM_TMPSVC_ID_ISR, &(Custom_App_Context.TMP_TIMER_ID), hw_ts_SingleShot, TMP_TIMER_ISR);
 	HW_TS_Create(CFG_TIM_BATTSVC_ID_ISR, &(Custom_App_Context.BATT_TIMER_ID), hw_ts_SingleShot, BATT_TIMER_ISR);
+
+	ssd1306_Init();
+
+	ssd1306_SetCursor(5,5);
+	ssd1306_WriteString(initMSG, Font_7x10, White);
+	char connectMSG[] = "Please Connect";
+	ssd1306_SetCursor(5,20);
+	ssd1306_WriteString(connectMSG, Font_7x10, White);
+	ssd1306_UpdateScreen();
+
   /* USER CODE END CUSTOM_APP_Init */
   return;
 }
@@ -268,6 +291,25 @@ void BATT_TIMER_ISR(void)
 }
 
 /* User Function definitions */
+void updateConnScreen(void)
+{
+	ssd1306_SetCursor(15, 50);
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(16, 50);
+	ssd1306_Fill(Black);
+	char CMSG[] = "Connected";
+	ssd1306_SetCursor(5, 50);
+	ssd1306_WriteString(CMSG, Font_7x10, White);
+	ssd1306_UpdateScreen();
+}
+
+void updateDisConnScreen(void)
+{
+	char DMSG[] = "Disconnected";
+	ssd1306_SetCursor(5, 50);
+	ssd1306_WriteString(DMSG, Font_7x10, White);
+	ssd1306_UpdateScreen();
+}
 void readTemperature(void)
 {
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t *) (Custom_App_Context.ADC_BUFF), 2);
@@ -281,6 +323,15 @@ void readTemperature(void)
 	HAL_ADC_Stop(&hadc1);
 	Custom_App_Context.ADC_CONV_CPLT = 0;
 	HW_TS_Start(Custom_App_Context.TMP_TIMER_ID, TMPTIMER_INTERVAL);
+
+	float voltage = (Custom_App_Context.TMP_ADC_VALUE/4095.0) * 3.3;
+	float temperature = voltage / 0.01;
+	ssd1306_SetCursor(5,35);
+	char buffer[20];
+	snprintf(buffer, sizeof(buffer), "Temp: %.2f C", temperature);
+	ssd1306_WriteString(buffer, Font_7x10, White);
+	ssd1306_UpdateScreen();
+
 	return;
 }
 
@@ -295,6 +346,13 @@ void readBattery(void)
 	HAL_ADC_Stop(&hadc1);
 	Custom_App_Context.ADC_CONV_CPLT = 0;
 	HW_TS_Start(Custom_App_Context.BATT_TIMER_ID, BATTTIMER_INTERVAL);
+
+	float battvoltage = (Custom_App_Context.BATT_ADC_VALUE/4095.0) * 3.3;
+	ssd1306_SetCursor(5,20);
+	char buffer[20];
+	snprintf(buffer, sizeof(buffer), "Battery: %.2f V", battvoltage);
+	ssd1306_WriteString(buffer, Font_7x10, White);
+	ssd1306_UpdateScreen();
 	return;
 }
 /* USER CODE END FD */

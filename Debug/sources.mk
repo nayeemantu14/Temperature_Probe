@@ -24,6 +24,7 @@ C_DEPS :=
 SUBDIRS := \
 Core/Src \
 Core/Startup \
+Drivers/Oled \
 Drivers/STM32WBxx_HAL_Driver/Src \
 Middlewares/ST/STM32_WPAN/ble/core/auto \
 Middlewares/ST/STM32_WPAN/ble/core/template \

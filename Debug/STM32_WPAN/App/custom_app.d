@@ -25,6 +25,8 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio_ex.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_hsem.h \
+ ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c.h \
+ ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c_ex.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_ipcc.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_pwr.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_pwr.h \
@@ -107,7 +109,11 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
  ../Middlewares/ST/STM32_WPAN/ble/svc/Inc/uuid.h \
  ../STM32_WPAN/App/custom_app.h ../STM32_WPAN/App/custom_stm.h \
  ../Utilities/sequencer/stm32_seq.h ../Core/Inc/stm32_lpm_if.h \
- ../Utilities/lpm/tiny_lpm/stm32_lpm.h
+ ../Utilities/lpm/tiny_lpm/stm32_lpm.h \
+ C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306_fonts.h \
+ C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306.h \
+ C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306_conf.h \
+ C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306.h
 ../Core/Inc/main.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal.h:
 ../Core/Inc/stm32wbxx_hal_conf.h:
@@ -135,6 +141,8 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio_ex.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_hsem.h:
+../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c.h:
+../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c_ex.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_ipcc.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_pwr.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_pwr.h:
@@ -224,3 +232,7 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
 ../Utilities/sequencer/stm32_seq.h:
 ../Core/Inc/stm32_lpm_if.h:
 ../Utilities/lpm/tiny_lpm/stm32_lpm.h:
+C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306_fonts.h:
+C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306.h:
+C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306_conf.h:
+C:/Work/Projects/ST\ Workspace/Temperature_Probe/Drivers/Oled/ssd1306.h:
